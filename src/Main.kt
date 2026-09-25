@@ -1,7 +1,6 @@
 import com.deavidig.Reactor.application.Application
 import com.deavidig.Reactor.application.Window
 import com.deavidig.Reactor.content.Settings
-import com.deavidig.Reactor.graphics.Color
 import com.deavidig.Reactor.graphics.scale.Percentage
 import com.deavidig.Reactor.graphics.scale.Pixel
 
