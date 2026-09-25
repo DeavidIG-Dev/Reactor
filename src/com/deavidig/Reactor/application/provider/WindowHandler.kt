@@ -6,9 +6,9 @@ import org.lwjgl.glfw.GLFW
 import org.lwjgl.glfw.GLFWWindowPosCallbackI
 
 public open class WindowHandler(protected val mWindow: Window) {
-	private lateinit var mWindowPositionChangeListener: Window.OnWindowPositionChangeListener;
+	private var mWindowPositionChangeListener: Window.OnWindowPositionChangeListener? = null;
 
-	private val mWindowPosCallbackI: GLFWWindowPosCallbackI = GLFWWindowPosCallbackI { window, x, y -> if (::mWindowPositionChangeListener.isInitialized) this.mWindowPositionChangeListener.onAfterWindowPositionChanged(window = this.mWindow, x = Pixel(x), y = Pixel(y)) };
+	private val mWindowPosCallbackI: GLFWWindowPosCallbackI = GLFWWindowPosCallbackI { window, x, y -> this.mWindowPositionChangeListener?.onAfterWindowPositionChanged(window = this.mWindow, x = Pixel(x), y = Pixel(y)); };
 
 	public final fun getWindow(): Window = this.mWindow;
 
@@ -16,9 +16,9 @@ public open class WindowHandler(protected val mWindow: Window) {
 		this.mWindowPositionChangeListener = listener;
 	}
 
-	public final fun registerWindow() {
+	public final fun getWindowPositionChangeListener(): Window.OnWindowPositionChangeListener? = this.mWindowPositionChangeListener;
+
+	public open fun registerWindow() {
 		GLFW.glfwSetWindowPosCallback(this.mWindow.getWindowIdentifier(), this.mWindowPosCallbackI)
 	}
-
-	public final fun getWindowPositionChangeListener(): Window.OnWindowPositionChangeListener? = if (::mWindowPositionChangeListener.isInitialized) this.mWindowPositionChangeListener else null;
 }

@@ -8,13 +8,14 @@ import com.deavidig.Reactor.graphics.scale.Dimension
 import com.deavidig.Reactor.graphics.scale.Fractional
 import com.deavidig.Reactor.graphics.scale.Percentage
 import com.deavidig.Reactor.graphics.scale.Pixel
+import com.deavidig.Reactor.graphics.system.TargetVideo
 import org.lwjgl.glfw.GLFW
 import org.lwjgl.glfw.GLFWVidMode
 import org.lwjgl.opengl.GL11
 import org.lwjgl.system.MemoryUtil
 
-open class WindowDelegate(private val mWindow: Window) {
-	protected final val mTargetVideo: GLFWVidMode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor())!!;
+public open class WindowDelegate(private val mWindow: Window) {
+	private val mTargetVideo: TargetVideoImp = TargetVideoImp()
 
 	private var mHeight: Dimension = Pixel(0);
 	private var mWidth: Dimension = Pixel(0);
@@ -91,6 +92,8 @@ open class WindowDelegate(private val mWindow: Window) {
 
 	public final fun getSettings(): Settings = this.mSettings;
 
+	public final fun getTargetVideo(): TargetVideo = this.mTargetVideo
+
 	public final fun getWidth(): Dimension = this.mWidth;
 
 	public final fun getWindow(): Window = mWindow;
@@ -101,7 +104,23 @@ open class WindowDelegate(private val mWindow: Window) {
 
 	public open fun getIntSystemDimension(dimension: Dimension, type: Int): Int = when (dimension) {
 		is Pixel -> dimension.getDimension().toInt()
-		is Fractional -> ((if (type == TARGET_VIDEO_WIDTH) this.mTargetVideo.width() else if (type == TARGET_VIDEO_HEIGHT) this.mTargetVideo.height() else Reactor.setReactorError(arrayOf(Reactor.JReactorErrorType.IllegalArgumentValue, Reactor.JReactorErrorType.IllegalArgumentValue), "Only is posible use TARGET_VIDEO_WIDTH ($TARGET_VIDEO_WIDTH) or TARGET_VIDEO_HEIGHT ($TARGET_VIDEO_HEIGHT)"))  / dimension.getDimension()).toInt()
-		is Percentage -> ((dimension.getDimension() * (if (type == TARGET_VIDEO_WIDTH) this.mTargetVideo.width() else if (type == TARGET_VIDEO_HEIGHT) this.mTargetVideo.height() else Reactor.setReactorError(arrayOf(Reactor.JReactorErrorType.IllegalArgumentValue, Reactor.JReactorErrorType.IllegalArgumentValue), "Only is posible use TARGET_VIDEO_WIDTH ($TARGET_VIDEO_WIDTH) or TARGET_VIDEO_HEIGHT ($TARGET_VIDEO_HEIGHT)")) ) / 100f).toInt();
+		is Fractional -> ((if (type == TARGET_VIDEO_WIDTH) this.mTargetVideo.getWidth() else if (type == TARGET_VIDEO_HEIGHT) this.mTargetVideo.getHeight() else Reactor.setReactorError(arrayOf(Reactor.JReactorErrorType.IllegalArgumentValue, Reactor.JReactorErrorType.IllegalArgumentValue), "Only is posible use TARGET_VIDEO_WIDTH ($TARGET_VIDEO_WIDTH) or TARGET_VIDEO_HEIGHT ($TARGET_VIDEO_HEIGHT)"))  / dimension.getDimension()).toInt()
+		is Percentage -> ((dimension.getDimension() * (if (type == TARGET_VIDEO_WIDTH) this.mTargetVideo.getWidth() else if (type == TARGET_VIDEO_HEIGHT) this.mTargetVideo.getHeight() else Reactor.setReactorError(arrayOf(Reactor.JReactorErrorType.IllegalArgumentValue, Reactor.JReactorErrorType.IllegalArgumentValue), "Only is posible use TARGET_VIDEO_WIDTH ($TARGET_VIDEO_WIDTH) or TARGET_VIDEO_HEIGHT ($TARGET_VIDEO_HEIGHT)")) ) / 100f).toInt();
+	}
+
+	private final class TargetVideoImp() : TargetVideo {
+		private final val mTargetVideo: GLFWVidMode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor())!!;
+
+		override fun getWidth(): Int = this.mTargetVideo.width();
+
+		override fun getHeight(): Int = this.mTargetVideo.height();
+
+		override fun getRedBit(): Int = this.mTargetVideo.redBits();
+
+		override fun getGreenBit(): Int = this.mTargetVideo.greenBits();
+
+		override fun getBlueBit(): Int = this.mTargetVideo.blueBits();
+
+		override fun getRateRefresh(): Int = this.mTargetVideo.refreshRate();
 	}
 }

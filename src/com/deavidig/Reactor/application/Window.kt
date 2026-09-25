@@ -11,13 +11,13 @@ import com.deavidig.Reactor.graphics.scale.Dimension
 import com.deavidig.Reactor.graphics.scale.Pixel
 import org.lwjgl.glfw.GLFW
 import org.lwjgl.opengl.GL
-import org.lwjgl.opengl.GL11
 import org.lwjgl.system.MemoryUtil
 
 public open class Window(private val application: Application) : Context {
 	private val mWindowIdentifier: Long;
-	private val mWindowDelegate: WindowDelegate;
-	private val mWindowHandler: WindowHandler;
+
+	private var mWindowDelegate: WindowDelegate; // custom Window Delegate for extend new capacities
+	private var mWindowHandler: WindowHandler; // custom Window Handler for extend new capacities
 
 	init {
 		application.setRegisterWindow(this)
@@ -93,6 +93,10 @@ public open class Window(private val application: Application) : Context {
 	public final fun setOnWindowSizeChangedListener(listener: OnWindowSizeChangeListener?): Unit = Unit;
 
 	public final fun setWidth(dimension: Dimension): Unit = this.mWindowDelegate.setWidth(dimension);
+
+	public final fun setWindowDelegate(delegate: WindowDelegate): Unit { this.mWindowDelegate = delegate; }
+
+	public final fun setWindowHandler(handler: WindowHandler): Unit { this.mWindowHandler = handler; }
 
 	public final fun setX(dimension: Dimension): Unit = this.mWindowDelegate.setX(dimension);
 

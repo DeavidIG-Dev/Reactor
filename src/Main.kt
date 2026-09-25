@@ -25,9 +25,5 @@ class MyWindow(application: Application) : Window(application = application) {
 		setWidth(Pixel(800))
 		setHeight(Pixel(800))
 		setY(Percentage(45))
-
-		println(getSettings().getSystemMode())
-		getSettings().setSystemMode(Settings.SYSTEM_MODE_THEME_DARK)
-		println(getSettings().getSystemMode())
 	}
 }
