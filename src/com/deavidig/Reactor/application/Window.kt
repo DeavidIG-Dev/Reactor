@@ -3,6 +3,7 @@ package com.deavidig.Reactor.application
 import com.deavidig.Reactor.Reactor
 import com.deavidig.Reactor.application.provider.WindowDelegate
 import com.deavidig.Reactor.application.provider.WindowHandler
+import com.deavidig.Reactor.application.provider.WindowManager
 import com.deavidig.Reactor.content.Context
 import com.deavidig.Reactor.content.Resources
 import com.deavidig.Reactor.content.Settings
@@ -19,6 +20,8 @@ public open class Window(private val application: Application) : Context {
 	internal var mWindowDelegate: WindowDelegate; // custom Window Delegate for extend new capacities
 	internal var mWindowHandler: WindowHandler; // custom Window Handler for extend new capacities
 
+	internal var mWindowManager: WindowManager;
+
 	init {
 		application.setRegisterWindow(this)
 
@@ -31,28 +34,27 @@ public open class Window(private val application: Application) : Context {
 		GLFW.glfwWindowHint(GLFW.GLFW_STENCIL_BITS, 8)
 
 		this.mWindowIdentifier = GLFW.glfwCreateWindow(
-			1,
-			1,
-			"Window",
-			MemoryUtil.NULL,
-			MemoryUtil.NULL
+			1, // DEFAULT VALUE
+			1, // DEFAULT VALUE
+			"Window", // DEFAULT VALUE
+			MemoryUtil.NULL, // DEFAULT VALUE
+			MemoryUtil.NULL // DEFAULT VALUE
 		)
 
-		if (this.mWindowIdentifier == MemoryUtil.NULL) Reactor.setReactorError(Reactor.JReactorErrorType.FailedInitializeValue, "Cannot initialize the Window in ???")
+		if (this.mWindowIdentifier == MemoryUtil.NULL) Reactor.setReactorError(Reactor.ReactorErrorType.FailedInitializeValue, "Cannot initialize the Window in ???")
 
 		// this.mWindowDelegate.getIntSystemDimension(this.getWidth(), WindowDelegate.TARGET_VIDEO_WIDTH)
 		// this.mWindowDelegate.getIntSystemDimension(this.getHeight(), WindowDelegate.TARGET_VIDEO_HEIGHT)
 
 		this.mWindowDelegate = WindowDelegate(this)
 		this.mWindowHandler = WindowHandler(this)
+		this.mWindowManager = WindowManager(this)
 
 		onCreate()
 
 		GLFW.glfwShowWindow(this.mWindowIdentifier)
 		GLFW.glfwMakeContextCurrent(this.mWindowIdentifier)
 		GLFW.glfwSwapInterval(GLFW.GLFW_TRUE);
-
-		this.mWindowHandler.registerWindow()
 
 		onStart()
 
@@ -88,9 +90,11 @@ public open class Window(private val application: Application) : Context {
 
 	public final fun setHeight(dimension: Dimension): Unit = this.mWindowDelegate.setHeight(dimension);
 
-	public final fun setOnWindowPositionChangedListener(listener: OnWindowPositionChangeListener): Unit = this.mWindowHandler.setWindowPositionChangeListener(listener);
+	public final fun setOnWindowPositionChangedListener(listener: OnWindowPositionChangeListener?): Unit = this.mWindowHandler.setWindowPositionChangeListener(listener);
 
 	public final fun setOnWindowSizeChangedListener(listener: OnWindowSizeChangeListener?): Unit = Unit;
+
+	public final fun setTitle(title: String?): Unit = this.mWindowDelegate.setTitle(title);
 
 	public final fun setWidth(dimension: Dimension): Unit = this.mWindowDelegate.setWidth(dimension);
 
@@ -130,7 +134,7 @@ public open class Window(private val application: Application) : Context {
 
 	public override fun getTheme(): Theme = TODO("Not yet implemented")
 
-	public override fun getResources(): Resources = TODO("Not yet implemented")
+	public override fun getResources(): Resources = this.mWindowManager.getResource()
 
 	public override fun getSettings(): Settings = this.mWindowDelegate.getSettings();
 }

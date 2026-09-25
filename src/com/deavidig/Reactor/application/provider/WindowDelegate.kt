@@ -64,7 +64,11 @@ public open class WindowDelegate(private val mWindow: Window) {
 		this.mWindow.getOnWindowPositionChangedListener()?.onAfterWindowPositionChanged(this.mWindow, if (this.mX is Pixel) this.mX as Pixel else Pixel(getIntSystemDimension(this.mX, TARGET_VIDEO_WIDTH)), if (this.mY is Pixel) this.mY as Pixel else Pixel(getIntSystemDimension(this.mY, TARGET_VIDEO_HEIGHT)));
 	}
 
-	public final fun isDirtyWindow(): Boolean = this.mIsDirty
+	public final fun isDirtyWindow(): Boolean = this.mIsDirty;
+
+	public final fun setTitle(title: String?): Unit {
+		GLFW.glfwSetWindowTitle(this.mWindow.getWindowIdentifier(), title ?: "Window");
+	}
 
 	public final fun setHeight(dimension: Dimension): Unit {
 		this.mHeight = dimension;
@@ -94,7 +98,9 @@ public open class WindowDelegate(private val mWindow: Window) {
 
 	public final fun getSettings(): Settings = this.mSettings;
 
-	public final fun getTargetVideo(): TargetVideo = this.mTargetVideo
+	public final fun getTargetVideo(): TargetVideo = this.mTargetVideo;
+
+	public final fun getTitle(): String = GLFW.glfwGetWindowTitle(this.mWindow.getWindowIdentifier()) ?: "Window"
 
 	public final fun getWidth(): Dimension = this.mWidth;
 
@@ -106,8 +112,8 @@ public open class WindowDelegate(private val mWindow: Window) {
 
 	public open fun getIntSystemDimension(dimension: Dimension, type: Int): Int = when (dimension) {
 		is Pixel -> dimension.getDimension().toInt()
-		is Fractional -> ((if (type == TARGET_VIDEO_WIDTH) this.mTargetVideo.getWidth() else if (type == TARGET_VIDEO_HEIGHT) this.mTargetVideo.getHeight() else Reactor.setReactorError(arrayOf(Reactor.JReactorErrorType.IllegalArgumentValue, Reactor.JReactorErrorType.IllegalArgumentValue), "Only is posible use TARGET_VIDEO_WIDTH ($TARGET_VIDEO_WIDTH) or TARGET_VIDEO_HEIGHT ($TARGET_VIDEO_HEIGHT)"))  / dimension.getDimension()).toInt()
-		is Percentage -> ((dimension.getDimension() * (if (type == TARGET_VIDEO_WIDTH) this.mTargetVideo.getWidth() else if (type == TARGET_VIDEO_HEIGHT) this.mTargetVideo.getHeight() else Reactor.setReactorError(arrayOf(Reactor.JReactorErrorType.IllegalArgumentValue, Reactor.JReactorErrorType.IllegalArgumentValue), "Only is posible use TARGET_VIDEO_WIDTH ($TARGET_VIDEO_WIDTH) or TARGET_VIDEO_HEIGHT ($TARGET_VIDEO_HEIGHT)")) ) / 100f).toInt();
+		is Fractional -> ((if (type == TARGET_VIDEO_WIDTH) this.mTargetVideo.getWidth() else if (type == TARGET_VIDEO_HEIGHT) this.mTargetVideo.getHeight() else Reactor.setReactorError(arrayOf(Reactor.ReactorErrorType.IllegalArgumentValue, Reactor.ReactorErrorType.IllegalArgumentValue), "Only is posible use TARGET_VIDEO_WIDTH ($TARGET_VIDEO_WIDTH) or TARGET_VIDEO_HEIGHT ($TARGET_VIDEO_HEIGHT)"))  / dimension.getDimension()).toInt()
+		is Percentage -> ((dimension.getDimension() * (if (type == TARGET_VIDEO_WIDTH) this.mTargetVideo.getWidth() else if (type == TARGET_VIDEO_HEIGHT) this.mTargetVideo.getHeight() else Reactor.setReactorError(arrayOf(Reactor.ReactorErrorType.IllegalArgumentValue, Reactor.ReactorErrorType.IllegalArgumentValue), "Only is posible use TARGET_VIDEO_WIDTH ($TARGET_VIDEO_WIDTH) or TARGET_VIDEO_HEIGHT ($TARGET_VIDEO_HEIGHT)")) ) / 100f).toInt();
 	}
 
 	private final class TargetVideoImp() : TargetVideo {

@@ -7,14 +7,14 @@ import java.util.Properties
 
 interface Resources {
 	// Lazy mode! (Get all (only the called) only when use/instance)
-	public fun getDirectories(): Array<Directory>
+	public fun getDirectories(): Sequence<Directory>
 
 	// Lazy mode! (Get all (only the called) only when use/instance)
-	public fun getFiles(): Array<File>;
+	public fun getFiles(): Sequence<File>;
 
 	// Lazy mode! (Get all (only the called) only when use/instance)
-	public fun getPortableNetworkGraphics(): Array<PortableNetworkGraphic>
+	public fun getPortableNetworkGraphics(): Sequence<PortableNetworkGraphic>
 
 	// Lazy mode! (Get all (only the called) only when use/instance)
-	public fun getProperties(): Array<Properties>;
+	public fun getProperties(): Sequence<Properties>;
 }

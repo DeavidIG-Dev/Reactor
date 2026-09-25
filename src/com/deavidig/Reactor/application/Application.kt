@@ -11,7 +11,7 @@ public open abstract class Application() {
 	}
 
 	public final fun setWindowRun(run: Unit.() -> Unit): Unit {
-		if (!GLFW.glfwInit()) Reactor.setReactorError(Reactor.JReactorErrorType.FailedInitializeValue, "Cannot initialize the GLFW for create Windows.");
+		if (!GLFW.glfwInit()) Reactor.setReactorError(Reactor.ReactorErrorType.FailedInitializeValue, "Cannot initialize the GLFW for create Windows.");
 
 		run.invoke(Unit);
 
