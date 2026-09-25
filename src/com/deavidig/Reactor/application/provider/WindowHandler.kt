@@ -8,7 +8,10 @@ import org.lwjgl.glfw.GLFWWindowPosCallbackI
 public open class WindowHandler(protected val mWindow: Window) {
 	private var mWindowPositionChangeListener: Window.OnWindowPositionChangeListener? = null;
 
-	private val mWindowPosCallbackI: GLFWWindowPosCallbackI = GLFWWindowPosCallbackI { window, x, y -> this.mWindowPositionChangeListener?.onAfterWindowPositionChanged(window = this.mWindow, x = Pixel(x), y = Pixel(y)); };
+	private val mWindowPosCallbackI: GLFWWindowPosCallbackI = GLFWWindowPosCallbackI { _, x, y ->
+		this.mWindow.mWindowDelegate.setX(Pixel(x))
+		this.mWindow.mWindowDelegate.setY(Pixel(y));
+	};
 
 	public final fun getWindow(): Window = this.mWindow;
 

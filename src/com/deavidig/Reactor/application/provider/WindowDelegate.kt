@@ -77,12 +77,14 @@ public open class WindowDelegate(private val mWindow: Window) {
 	}
 
 	public final fun setX(x: Dimension): Unit {
+		if ((if (this.mX is Pixel) (this.mX as Pixel).getDimension() else getIntSystemDimension(this.mX, TARGET_VIDEO_WIDTH)) == (if (x is Pixel) x.getDimension() else getIntSystemDimension(x, TARGET_VIDEO_WIDTH))) return
 		this.mWindow.getOnWindowPositionChangedListener()?.onBeforeWindowPositionChanged(this.mWindow, if (this.mX is Pixel) this.mX as Pixel else Pixel(getIntSystemDimension(this.mX, TARGET_VIDEO_WIDTH)), if (this.mY is Pixel) this.mY as Pixel else Pixel(getIntSystemDimension(this.mY, TARGET_VIDEO_HEIGHT)));
 		this.mX = x;
 		invalidateWindow()
 	}
 
 	public final fun setY(y: Dimension): Unit {
+		if ((if (this.mY is Pixel) (this.mY as Pixel).getDimension() else getIntSystemDimension(this.mY, TARGET_VIDEO_WIDTH)) == (if (y is Pixel) y.getDimension() else getIntSystemDimension(y, TARGET_VIDEO_WIDTH))) return
 		this.mWindow.getOnWindowPositionChangedListener()?.onBeforeWindowPositionChanged(this.mWindow, if (this.mX is Pixel) this.mX as Pixel else Pixel(getIntSystemDimension(this.mX, TARGET_VIDEO_WIDTH)), if (this.mY is Pixel) this.mY as Pixel else Pixel(getIntSystemDimension(this.mY, TARGET_VIDEO_HEIGHT)));
 		this.mY = y;
 		invalidateWindow()

@@ -16,8 +16,8 @@ import org.lwjgl.system.MemoryUtil
 public open class Window(private val application: Application) : Context {
 	private val mWindowIdentifier: Long;
 
-	private var mWindowDelegate: WindowDelegate; // custom Window Delegate for extend new capacities
-	private var mWindowHandler: WindowHandler; // custom Window Handler for extend new capacities
+	internal var mWindowDelegate: WindowDelegate; // custom Window Delegate for extend new capacities
+	internal var mWindowHandler: WindowHandler; // custom Window Handler for extend new capacities
 
 	init {
 		application.setRegisterWindow(this)
@@ -114,7 +114,11 @@ public open class Window(private val application: Application) : Context {
 
 	public final fun getOnWindowSizeChangedListener(): OnWindowSizeChangeListener? = null;
 
-	public final fun getWindowIdentifier(): Long = this.mWindowIdentifier
+	public final fun getWindowIdentifier(): Long = this.mWindowIdentifier;
+
+	public final fun getWindowDelegate(): WindowDelegate = this.mWindowDelegate;
+
+	public final fun getWindowHandler(): WindowHandler = this.mWindowHandler;
 
 	public final fun getWidth(): Dimension = this.mWindowDelegate.getWidth();
 
