@@ -24,7 +24,8 @@ class MyWindow(application: Application) : Window(application = application) {
 		super.onCreate()
 		setWidth(Pixel(800))
 		setHeight(Pixel(800))
-		setY(Percentage(45))
+		setY(Percentage(25))
+		setX(Percentage(45))
 		setTitle("Name")
 	}
 }
