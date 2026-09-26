@@ -81,5 +81,5 @@ public class Canvas {
 				NanoVG.nvgFill(this.mVectorialGraphics)
 			}
 		)
-	} //
+	}
 }
